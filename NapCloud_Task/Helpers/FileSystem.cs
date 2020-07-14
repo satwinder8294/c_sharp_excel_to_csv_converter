@@ -61,7 +61,7 @@ namespace NapCloud_Task.Helpers
                 {
                     var csvData = new StringBuilder();
 
-                    progressBar.Maximum = sheet.LastRowNum;
+                    progressBar.Maximum = (sheet.LastRowNum - 1);
 
                     // create a new workbook, as we need to store failed records in error.xlsx
                     IWorkbook errorWorkbook = new HSSFWorkbook();
@@ -71,7 +71,7 @@ namespace NapCloud_Task.Helpers
                     if (sheet.LastRowNum > maxRowsPerCsv)
                     {
                         // as per requirement if supplied number of rows count exceed the max (i. e 10,000), then all file names should be different
-                        fileNameCsv = Util.getCurrentTimestamp();
+                        fileNameCsv = Util.getCurrentTimestamp() + ".csv";
                     }
 
                     // loop through rows
@@ -157,12 +157,14 @@ namespace NapCloud_Task.Helpers
                                     }
 
                                     var newLine = $"{inputData.PID.ToString()}{csvSeparator}{inputData.ContractNumber}{csvSeparator}{inputData.ProductId}{csvSeparator}{inputData.MfrPN}{csvSeparator}{inputData.MfrName}{csvSeparator}{inputData.VendorName}{csvSeparator}{inputData.VendorPN}{csvSeparator}{inputData.Cost}{csvSeparator}{inputData.Coo}{csvSeparator}{inputData.ShortDescription}{csvSeparator}{inputData.LongDescription}{csvSeparator}{inputData.UPC}{csvSeparator}{inputData.UOM}{csvSeparator}{inputData.SaleStartDate}{csvSeparator}{inputData.SaleEndDate}{csvSeparator}{inputData.SalesPrice}";
-                                    
+
+                                    csvData.AppendLine(newLine);
+
                                     progressBar.Value = i;
                                     rowCounter = rowCounter + 1;
 
                                     // if rows counter is greater than equal to or the index reaches at the last, then we need to generate the csv
-                                    if (rowCounter >= maxRowsPerCsv || i == sheet.LastRowNum)
+                                    if (rowCounter >= maxRowsPerCsv || i == (sheet.LastRowNum - 1))
                                     {
                                         // create and save data in csv file
                                         File.AppendAllText(uploadDirectory + "\\" + fileNameCsv, csvData.ToString());
@@ -208,6 +210,10 @@ namespace NapCloud_Task.Helpers
                                     ICell cellTitle = errorRowTitle.CreateCell(k);
                                     cellTitle.SetCellValue(Constants.headerTitleXlsx[k]);
                                 }
+
+                                // add a column to state the error detail, so that user dont have to find out whats wrong for each row
+                                ICell cellTitleDetail = errorRowTitle.CreateCell(Constants.headerTitleXlsx.Length);
+                                cellTitleDetail.SetCellValue("Error Detail");
                             }
 
                             // for each new error create a new row and replicate the failed row to this one
@@ -218,6 +224,9 @@ namespace NapCloud_Task.Helpers
                                 dynamic cellValue = sheet.GetRow(i).GetCell(j) != null ? sheet.GetRow(i).GetCell(j).ToString() : "";
                                 cell.SetCellValue(cellValue);
                             }
+
+                            ICell cellError = errorRow.CreateCell(sheet.GetRow(i).LastCellNum);
+                            cellError.SetCellValue(errorMessage);
 
                             // add message to the error list in windows form for user readability
                             errorBox.Items.Add(errorMessage);

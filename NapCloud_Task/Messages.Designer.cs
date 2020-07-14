@@ -79,6 +79,15 @@ namespace NapCloud_Task {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Following fileds have invalid value.
+        /// </summary>
+        internal static string ErrorInvalidField {
+            get {
+                return ResourceManager.GetString("ErrorInvalidField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid file format. Please check number cells..
         /// </summary>
         internal static string ErrorInvalidNumberOfCells {

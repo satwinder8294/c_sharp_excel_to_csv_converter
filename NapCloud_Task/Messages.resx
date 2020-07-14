@@ -123,6 +123,9 @@
   <data name="ErrorInvalidCellFormat" xml:space="preserve">
     <value>Invalid file format. Please check the cell order.</value>
   </data>
+  <data name="ErrorInvalidField" xml:space="preserve">
+    <value>Following fileds have invalid value</value>
+  </data>
   <data name="ErrorInvalidNumberOfCells" xml:space="preserve">
     <value>Invalid file format. Please check number cells.</value>
   </data>

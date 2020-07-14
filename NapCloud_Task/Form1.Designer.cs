@@ -110,7 +110,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 522);
+            this.ClientSize = new System.Drawing.Size(467, 522);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.lblProgressBar);
             this.Controls.Add(this.errorBox);
@@ -119,6 +119,7 @@
             this.Controls.Add(this.btnSubmit);
             this.Controls.Add(this.lblProductCatalog);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CSV Converter";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -46,7 +46,7 @@ namespace NapCloud_Task
                     }
                     if (colName.ToLower() != headerRowTitlesXlsx[i].ToLower())
                     {
-                        response.Message = resourceMgr.GetString("ErrorInvalidCellFormat") + " <> " + i + " <> " + headerRowTitlesXlsx[i];
+                        response.Message = resourceMgr.GetString("ErrorInvalidCellFormat") + " " + headerRowTitlesXlsx[i];
                         break;
                     }
                 }
@@ -78,12 +78,22 @@ namespace NapCloud_Task
             string requiredFieldResult = validateRequiredFields(inputData);
             if (!string.IsNullOrEmpty(requiredFieldResult))
             {
-                message = resourceMgr.GetString("ErrorRequiredField") + requiredFieldResult;
+                message = resourceMgr.GetString("ErrorRequiredField") + " " + requiredFieldResult;
                
             } else
             {
-                status = 1;
-                message = resourceMgr.GetString("SuccessValidation");
+                // . validate attribute length
+                string errorFields = validateAttributeLength(inputData);
+                if (!string.IsNullOrEmpty(errorFields))
+                {
+                    message = resourceMgr.GetString("ErrorInvalidField") + " " + errorFields;
+
+                }
+                else
+                {
+                    status = 1;
+                    message = resourceMgr.GetString("SuccessValidation");
+                }
             }
 
             response.Status = status;
@@ -126,5 +136,77 @@ namespace NapCloud_Task
             return requiredFields;
         }
 
+
+        public string validateAttributeLength(InputDataXlsx inputData)
+        {
+            string errorFields = "";
+            
+            if (inputData.PID.ToString().Length > 20)
+            {
+                errorFields = errorFields + "PID, ";
+            }
+            if (inputData.ContractNumber.Length > 20)
+            {
+                errorFields = errorFields + "Contract Number, ";
+            }
+            if (inputData.ProductId.Length > 50)
+            {
+                errorFields = errorFields + "Product Id, ";
+            }
+            if (inputData.MfrPN.Length > 50)
+            {
+                errorFields = errorFields + "Mfr PN, ";
+            }
+            if (inputData.MfrName.Length > 50)
+            {
+                errorFields = errorFields + "Mfr Name, ";
+            }
+            if (inputData.VendorName.Length > 50)
+            {
+                errorFields = errorFields + "Vendor Name, ";
+            }
+            if (inputData.VendorPN.Length > 50)
+            {
+                errorFields = errorFields + "Vendor PN, ";
+            }
+            if (inputData.Cost.ToString().Length > 20)
+            {
+                errorFields = errorFields + "Cost, ";
+            }
+            if (inputData.Coo.Length > 2)
+            {
+                errorFields = errorFields + "Coo, ";
+            }
+            if (inputData.ShortDescription.Length > 300)
+            {
+                errorFields = errorFields + "Short Description, ";
+            }
+            if (inputData.LongDescription.Length > 3000)
+            {
+                errorFields = errorFields + "Long Description, ";
+            }
+            if (inputData.UPC.Length > 12)
+            {
+                errorFields = errorFields + "UPC, ";
+            }
+            if (inputData.UOM.Length > 2)
+            {
+                errorFields = errorFields + "UOM, ";
+            }
+            if (inputData.SaleStartDate.Length > 20)
+            {
+                errorFields = errorFields + "Sale Start Date, ";
+            }
+            if (inputData.SaleEndDate.Length > 20)
+            {
+                errorFields = errorFields + "Sale End Date, ";
+            }
+            if (inputData.SalesPrice.ToString().Length > 20)
+            {
+                errorFields = errorFields + "Sales Price, ";
+            }
+
+            return errorFields;
+        }
     }
 }
